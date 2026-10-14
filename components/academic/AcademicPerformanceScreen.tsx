@@ -185,18 +185,18 @@ function StatCard({
   accent?: string;
 }) {
   return (
-    <div className="bg-white rounded-[24px] p-5 border border-slate-100 shadow-[0_2px_12px_-2px_rgba(17,35,61,0.06)] flex flex-col gap-1">
-      <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">
+    <div className="bg-white rounded-2xl sm:rounded-[24px] p-3.5 sm:p-5 border border-slate-100 shadow-[0_2px_12px_-2px_rgba(17,35,61,0.06)] flex flex-col gap-0.5 sm:gap-1">
+      <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400">
         {label}
       </span>
       <span
-        className={`text-3xl font-black tracking-tight ${
+        className={`text-2xl sm:text-3xl font-black tracking-tight ${
           accent || "text-[#11233D]"
         }`}
       >
         {value}
       </span>
-      <span className="text-[11px] font-semibold text-slate-400">{sub}</span>
+      <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 truncate">{sub}</span>
     </div>
   );
 }
@@ -261,33 +261,33 @@ export default function AcademicPerformanceScreen({
   ] as const;
 
   return (
-    <div className="max-w-6xl mx-auto w-full space-y-6 animate-in fade-in duration-300">
+    <div className="max-w-6xl mx-auto w-full space-y-4 sm:space-y-6 animate-in fade-in duration-300">
       {/* ── Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex items-center gap-2.5 mb-1">
-            <div className="w-8 h-8 rounded-xl bg-[#11233D] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-[#11233D] flex items-center justify-center shrink-0">
               <BookOpen className="w-4 h-4 text-[#00CEE6]" />
             </div>
-            <h1 className="text-xl font-black text-[#11233D]">
+            <h1 className="text-lg sm:text-xl font-black text-[#11233D]">
               Academic Performance
             </h1>
           </div>
-          <p className="text-xs text-slate-400 font-semibold ml-10">
+          <p className="text-[11px] sm:text-xs text-slate-400 font-semibold ml-10">
             Sem 7 · CSE · 21BCE1089
           </p>
         </div>
 
-        <div className="flex items-center gap-2 ml-10 sm:ml-0">
+        <div className="flex items-center gap-2 ml-10 sm:ml-0 flex-wrap">
           {atRiskCount > 0 && (
-            <span className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-bold px-3 py-1.5 rounded-full">
+            <span className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 text-[10px] sm:text-[11px] font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full">
               <AlertTriangle className="w-3 h-3" />
               {atRiskCount} subject{atRiskCount > 1 ? "s" : ""} need attention
             </span>
           )}
           <button
             onClick={handleExport}
-            className="flex items-center gap-1.5 bg-white border border-slate-200 text-[#11233D] text-xs font-bold px-4 py-2 rounded-full hover:bg-slate-50 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 bg-white border border-slate-200 text-[#11233D] text-xs font-bold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
           >
             <Download className="w-3.5 h-3.5 text-[#825FEF]" />
             {downloading ? "Generating…" : "Export PDF"}
@@ -296,7 +296,7 @@ export default function AcademicPerformanceScreen({
       </div>
 
       {/* ── KPI Strip ── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
         <StatCard
           label="CGPA"
           value={String(cgpa)}
@@ -324,14 +324,14 @@ export default function AcademicPerformanceScreen({
       </div>
 
       {/* ── Tabs ── */}
-      <div className="bg-white rounded-[28px] border border-slate-100 shadow-[0_2px_12px_-2px_rgba(17,35,61,0.06)] overflow-hidden">
+      <div className="bg-white rounded-2xl sm:rounded-[28px] border border-slate-100 shadow-[0_2px_12px_-2px_rgba(17,35,61,0.06)] overflow-hidden">
         {/* Tab Bar */}
-        <div className="flex border-b border-slate-100 px-6 pt-5 gap-1">
+        <div className="flex border-b border-slate-100 px-4 sm:px-6 pt-3 sm:pt-5 gap-1 overflow-x-auto scrollbar-none">
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
-              className={`pb-3 px-4 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+              className={`pb-2.5 sm:pb-3 px-3.5 sm:px-4 text-xs font-bold border-b-2 transition-all cursor-pointer shrink-0 ${
                 activeTab === t.id
                   ? "border-[#00CEE6] text-[#11233D]"
                   : "border-transparent text-slate-400 hover:text-[#11233D]"
@@ -344,19 +344,19 @@ export default function AcademicPerformanceScreen({
 
         {/* ── TAB: Overview ── */}
         {activeTab === "overview" && (
-          <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="p-3.5 sm:p-6 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* Left: Radar */}
             <div>
-              <p className="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-4">
+              <p className="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">
                 Sem 7 Subject Proficiency
               </p>
-              <div className="h-56">
+              <div className="h-44 sm:h-56">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart data={radarData} outerRadius={80}>
+                  <RadarChart data={radarData} outerRadius={75}>
                     <PolarGrid stroke="#E2E8F0" strokeDasharray="3 3" />
                     <PolarAngleAxis
                       dataKey="subject"
-                      tick={{ fontSize: 11, fill: "#64748B", fontWeight: 700 }}
+                      tick={{ fontSize: 10, fill: "#64748B", fontWeight: 700 }}
                     />
                     <Radar
                       dataKey="score"
@@ -381,25 +381,25 @@ export default function AcademicPerformanceScreen({
 
             {/* Right: Internal marks bar */}
             <div>
-              <p className="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-4">
+              <p className="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">
                 Internal Assessment (%)
               </p>
-              <div className="h-56">
+              <div className="h-44 sm:h-56">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={internalBarData}
-                    barSize={22}
+                    barSize={20}
                     margin={{ top: 4, right: 4, left: -24, bottom: 0 }}
                   >
                     <XAxis
                       dataKey="name"
-                      tick={{ fontSize: 10, fill: "#94A3B8", fontWeight: 700 }}
+                      tick={{ fontSize: 9, fill: "#94A3B8", fontWeight: 700 }}
                       axisLine={false}
                       tickLine={false}
                     />
                     <YAxis
                       domain={[0, 100]}
-                      tick={{ fontSize: 10, fill: "#94A3B8" }}
+                      tick={{ fontSize: 9, fill: "#94A3B8" }}
                       axisLine={false}
                       tickLine={false}
                     />
@@ -424,20 +424,20 @@ export default function AcademicPerformanceScreen({
             </div>
 
             {/* Grade summary row */}
-            <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+            <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3">
               {subjects.map((s) => (
                 <div
                   key={s.code}
-                  className="bg-[#F5F8FA] rounded-2xl p-3.5 flex flex-col gap-1 border border-slate-100"
+                  className="bg-[#F5F8FA] rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 flex flex-col gap-1 border border-slate-100"
                 >
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
                     {s.code}
                   </span>
-                  <span className="text-lg font-black text-[#11233D]">
+                  <span className="text-base sm:text-lg font-black text-[#11233D]">
                     {s.grade}
                   </span>
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full border w-fit ${s.gradeColor}`}
+                    className={`text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border w-fit ${s.gradeColor}`}
                   >
                     {gradePoints[s.grade]}pts
                   </span>
@@ -449,7 +449,7 @@ export default function AcademicPerformanceScreen({
 
         {/* ── TAB: Subjects ── */}
         {activeTab === "subjects" && (
-          <div className="p-6 space-y-3">
+          <div className="p-3.5 sm:p-6 space-y-2.5 sm:space-y-3">
             {subjects.map((s) => {
               const isExpanded = expandedSubject === s.code;
               const internalPct = Math.round(
@@ -466,23 +466,23 @@ export default function AcademicPerformanceScreen({
               return (
                 <div
                   key={s.code}
-                  className="border border-slate-100 rounded-2xl overflow-hidden transition-all duration-200"
+                  className="border border-slate-100 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-200"
                 >
                   {/* Row */}
                   <button
                     onClick={() =>
                       setExpandedSubject(isExpanded ? null : s.code)
                     }
-                    className="w-full flex items-center justify-between px-5 py-4 hover:bg-[#F5F8FA] transition-colors cursor-pointer text-left"
+                    className="w-full flex items-center justify-between px-3.5 sm:px-5 py-3 sm:py-4 hover:bg-[#F5F8FA] transition-colors cursor-pointer text-left"
                   >
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                    <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                       {/* Code + Type */}
                       <div className="shrink-0 text-center">
                         <p className="text-xs font-black text-[#11233D]">
                           {s.code}
                         </p>
                         <span
-                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                          className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
                             s.type === "Lab"
                               ? "bg-[#825FEF]/10 text-[#825FEF]"
                               : "bg-slate-100 text-slate-500"
@@ -610,19 +610,19 @@ export default function AcademicPerformanceScreen({
 
         {/* ── TAB: Trends ── */}
         {activeTab === "trends" && (
-          <div className="p-6 space-y-6">
+          <div className="p-3.5 sm:p-6 space-y-4 sm:space-y-6">
             {/* SGPA Trend */}
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <p className="text-[11px] font-black uppercase tracking-wider text-slate-400">
                   SGPA Progression
                 </p>
-                <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 sm:px-2.5 py-0.5 rounded-full flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
                   +0.95 over 6 sems
                 </span>
               </div>
-              <div className="h-52">
+              <div className="h-44 sm:h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
                     data={sgpaHistory}

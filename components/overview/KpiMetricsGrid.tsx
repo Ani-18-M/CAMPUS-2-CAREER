@@ -65,34 +65,34 @@ export default function KpiMetricsGrid({
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
       {metrics.map((m) => {
         const Icon = m.icon;
         return (
           <div
             key={m.id}
             onClick={() => onNavigateTab(m.targetTab)}
-            className="group bg-white rounded-[28px] p-5 sm:p-6 border-2 border-slate-200/80 shadow-[0_4px_20px_-2px_rgba(17,35,61,0.05)] hover:shadow-lg hover:border-[#00CEE6] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            className="group bg-white rounded-2xl sm:rounded-[28px] p-3.5 sm:p-6 border-2 border-slate-200/80 shadow-[0_4px_20px_-2px_rgba(17,35,61,0.05)] hover:shadow-lg hover:border-[#00CEE6] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             {/* Top row */}
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 group-hover:text-[#11233D] transition-colors">
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 group-hover:text-[#11233D] transition-colors truncate">
                 {m.label}
               </span>
               {m.dotColor ? (
                 <span className={`w-2.5 h-2.5 rounded-full ${m.dotColor} shrink-0`} />
               ) : Icon ? (
-                <Icon className="w-4 h-4 text-slate-400 group-hover:text-[#00CEE6] transition-colors" />
+                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 group-hover:text-[#00CEE6] transition-colors shrink-0" />
               ) : null}
             </div>
 
             {/* Stat Value */}
-            <div className="my-3 flex items-baseline gap-1.5">
-              <span className="text-3xl sm:text-4xl font-black text-[#11233D] tracking-tight">
+            <div className="my-1.5 sm:my-3 flex items-baseline gap-1 sm:gap-1.5">
+              <span className="text-2xl sm:text-4xl font-black text-[#11233D] tracking-tight">
                 {m.value}
               </span>
               {m.sub && (
-                <span className="text-xs font-bold text-slate-400">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-400">
                   {m.sub}
                 </span>
               )}
@@ -101,7 +101,7 @@ export default function KpiMetricsGrid({
             {/* Status Chip */}
             <div>
               <span
-                className={`inline-block text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border ${m.badgeColor}`}
+                className={`inline-block text-[10px] sm:text-[11px] font-extrabold px-2 sm:px-2.5 py-0.5 rounded-full border ${m.badgeColor}`}
               >
                 {m.badge}
               </span>

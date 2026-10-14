@@ -517,13 +517,13 @@ export default function PathwayOrbHub({
       {/* VIEW A: AI INFORMATION PAGE (SLOW WHITE EMERGENCE)            */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       {isAiView ? (
-        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 py-8 sm:px-6 sm:py-10 flex flex-col items-center animate-in fade-in duration-700">
+        <div className="relative z-20 w-full max-w-4xl mx-auto px-3 sm:px-6 py-4 sm:py-8 flex flex-col items-center animate-in fade-in duration-700">
           {/* Top Bar: Prominent Back to 8 Pathways Button */}
-          <div className="w-full flex items-center justify-between mb-4">
+          <div className="w-full flex items-center justify-between mb-3 sm:mb-4">
             <button
               type="button"
               onClick={handleBackToHub}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-100 hover:bg-[#11233D] hover:text-white text-[#11233D] text-xs font-black transition-all cursor-pointer shadow-xs border border-slate-200 group active:scale-95"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-100 hover:bg-[#11233D] hover:text-white text-[#11233D] text-xs font-black transition-all cursor-pointer shadow-xs border border-slate-200 group active:scale-95"
               title="Back to 8 Pathways Hub"
             >
               <ArrowLeft className="w-4 h-4 stroke-[2.5] group-hover:-translate-x-1 transition-transform" />
@@ -531,15 +531,15 @@ export default function PathwayOrbHub({
             </button>
 
             {/* Pathway Category Pill */}
-            <span className="text-[11px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full bg-[#00CEE6]/15 text-[#0099B8] border border-[#00CEE6]/30">
+            <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1 sm:px-3.5 rounded-full bg-[#00CEE6]/15 text-[#0099B8] border border-[#00CEE6]/30">
               {activeAiData.badge}
             </span>
           </div>
 
           {/* ── 1. CENTERED ORB: MOVED STRAIGHT UP & ROTATING WHILE ANSWERING (NO TEXT OR MIC BELOW) ── */}
-          <div className="flex flex-col items-center justify-center my-3 text-center">
+          <div className="flex flex-col items-center justify-center my-2 sm:my-3 text-center">
             {/* Perfectly Centered 3D Rotating Gyroscope Orb */}
-            <div className="w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center relative mx-auto">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center relative mx-auto">
               <CareerPathCenterOrb
                 isVoiceActive={isVoiceActive}
                 onToggleVoice={onToggleVoice}
@@ -721,10 +721,10 @@ export default function PathwayOrbHub({
         /* ═══════════════════════════════════════════════════════════════ */
         /* VIEW B: 8-TILE CAROUSEL HUB (DEFAULT DARK COSMIC STAGE)        */
         /* ═══════════════════════════════════════════════════════════════ */
-        <div className="relative z-10 px-4 py-8 sm:px-8 sm:py-10 max-w-6xl w-full mx-auto flex flex-col justify-center flex-1 transition-opacity duration-500">
+        <div className="relative z-10 px-3 py-4 sm:px-8 sm:py-8 max-w-6xl w-full mx-auto flex flex-col justify-center flex-1 transition-opacity duration-500">
           {/* Top Header Text */}
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">
+          <div className="text-center mb-4 sm:mb-8">
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">
               Choose a career path.{" "}
               <span
                 className="text-transparent bg-clip-text"
@@ -735,13 +735,72 @@ export default function PathwayOrbHub({
                 Get AI insights & web links.
               </span>
             </h2>
-            <p className="text-xs text-slate-300 mt-2 font-medium">
+            <p className="text-[11px] sm:text-xs text-slate-300 mt-1 sm:mt-2 font-medium">
               Click on any tile below to launch the rotating AI engine and explore roadmaps, web sources, and cutoffs.
             </p>
           </div>
 
+          {/* ── MOBILE VIEW (< lg): COMPACT GYROSCOPE ORB + 2-COLUMN GRID ── */}
+          <div className="lg:hidden flex flex-col items-center gap-3.5 mb-2">
+            {/* Compact Top Orb */}
+            <div className="w-36 h-36 sm:w-44 sm:h-44 flex items-center justify-center relative -my-1">
+              <CareerPathCenterOrb
+                isVoiceActive={isVoiceActive}
+                onToggleVoice={onToggleVoice}
+                scale={0.56}
+                isGenerating={isGenerating}
+                hideControls={true}
+                hideText={true}
+              />
+            </div>
+
+            {/* 8 Pathways in Responsive 2-Column Grid */}
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 w-full">
+              {ALL_TILES.map((item) => {
+                const Icon = item.Icon;
+                const isSelected = activeId === item.id;
+
+                return (
+                  <div
+                    key={`mob-${item.id}`}
+                    onClick={() => handleTileClick(item.id)}
+                    className="flex flex-col justify-between p-3 rounded-2xl cursor-pointer select-none bg-white border border-slate-200/90 active:scale-[0.98] transition-all shadow-xs hover:border-[#00CEE6]"
+                    style={{
+                      border: isSelected ? "2px solid #00CEE6" : undefined,
+                      boxShadow: isSelected
+                        ? "0 0 16px rgba(0,206,230,0.35)"
+                        : "0 2px 8px rgba(10,25,45,0.06)",
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{
+                          background: item.color === "#825FEF" ? "rgba(130, 95, 239, 0.12)" : "rgba(0, 206, 230, 0.12)",
+                          color: item.color === "#825FEF" ? "#7C3AED" : "#0099B8",
+                        }}
+                      >
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <h4 className="text-[12px] font-black tracking-tight text-[#11233D] line-clamp-1 leading-tight">
+                        {item.name}
+                      </h4>
+                    </div>
+                    <p className="text-[10px] text-slate-500 line-clamp-1 font-medium mb-1">
+                      {item.sub}
+                    </p>
+                    <span className="inline-flex items-center gap-1 text-[9px] font-extrabold text-[#0099B8]">
+                      <span>Explore</span>
+                      <ArrowRight className="w-2.5 h-2.5" />
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Main Stage: Left 4 Tiles | Center 3D Gyroscope Orb | Right 4 Tiles */}
-          <div ref={hubRef} className="relative flex flex-col lg:flex-row items-center justify-between gap-6 xl:gap-8">
+          <div ref={hubRef} className="hidden lg:flex relative flex-row items-center justify-between gap-6 xl:gap-8">
             {/* Living Neural Threads (Connecting White Floating Tiles to AI Orb) */}
             {threadCoords && (
               <svg

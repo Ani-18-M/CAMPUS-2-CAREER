@@ -62,10 +62,32 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      let { data, error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
         password: password,
       });
+
+      // Self-heal: If user is blocked due to unconfirmed email, auto-confirm via API and retry
+      if (error && error.message.toLowerCase().includes("email not confirmed")) {
+        try {
+          const res = await fetch("/api/auth/confirm-user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: cleanEmail }),
+          });
+          if (res.ok) {
+            // Retry sign-in now that user is confirmed
+            const retryResult = await supabase.auth.signInWithPassword({
+              email: cleanEmail,
+              password: password,
+            });
+            data = retryResult.data;
+            error = retryResult.error;
+          }
+        } catch {
+          // If auto-confirm API fails, fall through to default error handling
+        }
+      }
 
       if (error) {
         // Human-friendly error messages
@@ -146,20 +168,60 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
         return;
       }
 
-      // Check if session was automatically created or if confirmation email is required
+      // If session is already created (auto-confirm enabled), load workspace directly
       if (data.session) {
         setSuccessMessage("Account created successfully! Loading workspace...");
         setTimeout(() => {
           onLogin(role);
         }, 500);
-      } else {
-        setSuccessMessage(
-          "Account created! Please check your email to verify your address, then sign in."
-        );
+        return;
+      }
+
+      // Otherwise attempt immediate sign-in or auto-confirm fallback
+      const { data: signInData, error: signInErr } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password: password,
+      });
+
+      if (signInData?.session) {
+        setSuccessMessage("Account created successfully! Loading workspace...");
+        setTimeout(() => {
+          onLogin(role);
+        }, 500);
+      } else if (signInErr && signInErr.message.toLowerCase().includes("email not confirmed")) {
+        // Auto-confirm via API route and log in
+        try {
+          await fetch("/api/auth/confirm-user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: cleanEmail }),
+          });
+          const retry = await supabase.auth.signInWithPassword({
+            email: cleanEmail,
+            password: password,
+          });
+          if (retry.data?.session) {
+            setSuccessMessage("Account created successfully! Loading workspace...");
+            setTimeout(() => {
+              onLogin(role);
+            }, 500);
+            return;
+          }
+        } catch {
+          // Fall through
+        }
+
+        setSuccessMessage("Account created! You can now sign in.");
         setLoading(false);
         setTimeout(() => {
           setMode("signin");
-        }, 2200);
+        }, 1500);
+      } else {
+        setSuccessMessage("Account created successfully! You can now sign in.");
+        setLoading(false);
+        setTimeout(() => {
+          setMode("signin");
+        }, 1500);
       }
     } catch (err: unknown) {
       const errorMsg =

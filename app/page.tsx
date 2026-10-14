@@ -48,6 +48,7 @@ import {
   Layers,
   User,
   GraduationCap,
+  Menu,
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import OverviewDashboard from "@/components/overview/OverviewDashboard";
@@ -81,6 +82,7 @@ import { supabase } from "@/lib/supabaseClient";
 export default function StudentDashboard() {
   // Navigation State
   const [activeNav, setActiveNav] = useState("Overview");
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [selectedPathway, setSelectedPathway] = useState<string>("placements");
   const [exploredPathwayModal, setExploredPathwayModal] = useState<string | null>(null);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
@@ -615,20 +617,33 @@ export default function StudentDashboard() {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#EFF4F7] font-sans antialiased text-[#11233D] selection:bg-[#00CEE6]/20">
+      {/* Mobile Drawer Backdrop Overlay */}
+      {isMobileSidebarOpen && (
+        <div
+          onClick={() => setIsMobileSidebarOpen(false)}
+          className="fixed inset-0 bg-[#0A1626]/75 backdrop-blur-xs z-50 lg:hidden transition-opacity duration-300"
+          aria-hidden="true"
+        />
+      )}
+
       {/* ======================================================== */}
       {/* 1. SIDEBAR (Midnight Navy: #11233D, Cyan: #00CEE6)        */}
       {/* ======================================================== */}
       <aside
-        style={{ width: "280px", minWidth: "280px" }}
-        className="w-[280px] h-screen bg-[#11233D] border-r border-[#ACBACC]/20 text-white flex flex-col justify-between py-6 px-4 shrink-0 select-none shadow-2xl z-30 overflow-y-auto scrollbar-none"
+        className={`fixed lg:static inset-y-0 left-0 w-[280px] max-w-[85vw] lg:w-[280px] lg:min-w-[280px] h-screen bg-[#11233D] border-r border-[#ACBACC]/20 text-white flex flex-col justify-between py-6 px-4 shrink-0 select-none shadow-2xl z-50 overflow-y-auto scrollbar-none transition-transform duration-300 ease-in-out ${
+          isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
       >
         <div>
-          {/* Official Brand Header with Full C2C Phoenix Logo */}
-          <div className="px-1 mb-5 flex justify-center">
+          {/* Official Brand Header with Full C2C Phoenix Logo + Mobile Close Button */}
+          <div className="px-1 mb-5 flex items-center justify-between gap-2">
             <button
-              onClick={() => setActiveNav("Overview")}
+              onClick={() => {
+                setActiveNav(userRole === "student" ? "Overview" : "Batch Cockpit");
+                setIsMobileSidebarOpen(false);
+              }}
               style={{ maxHeight: "76px" }}
-              className="w-full h-[76px] rounded-xl bg-white p-2 flex items-center justify-center shadow-md shadow-black/30 ring-1 ring-white/20 hover:ring-[#00CEE6]/60 hover:scale-[1.02] transition-all cursor-pointer group overflow-hidden"
+              className="flex-1 h-[76px] rounded-xl bg-white p-2 flex items-center justify-center shadow-md shadow-black/30 ring-1 ring-white/20 hover:ring-[#00CEE6]/60 hover:scale-[1.02] transition-all cursor-pointer group overflow-hidden"
               title="Campus 2 Career - Return to Overview"
             >
               <img
@@ -637,6 +652,15 @@ export default function StudentDashboard() {
                 style={{ maxHeight: "60px", maxWidth: "100%", objectFit: "contain" }}
                 className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
               />
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsMobileSidebarOpen(false)}
+              className="lg:hidden w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer shrink-0"
+              title="Close sidebar"
+              aria-label="Close sidebar"
+            >
+              <X className="w-5 h-5 text-white" />
             </button>
           </div>
 
@@ -815,7 +839,10 @@ export default function StudentDashboard() {
               return (
                 <button
                   key={item.id}
-                  onClick={item.onClick}
+                  onClick={() => {
+                    item.onClick();
+                    setIsMobileSidebarOpen(false);
+                  }}
                   className={`group relative w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold transition-all duration-200 cursor-pointer select-none ${
                     item.isActive
                       ? userRole === "admin"
@@ -896,6 +923,7 @@ export default function StudentDashboard() {
           <button
             type="button"
             onClick={async () => {
+              setIsMobileSidebarOpen(false);
               try {
                 await supabase.auth.signOut();
               } catch {
@@ -926,17 +954,43 @@ export default function StudentDashboard() {
       {/* ======================================================== */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         {/* Top Navbar Bar - Slate Grey & Pebble Theme */}
-        <header className="px-6 lg:px-10 py-3.5 shrink-0 bg-gradient-to-r from-[#CAD5E2] via-[#E1E9F0] to-[#C3D0DD] backdrop-blur-xl border-b-2 border-slate-300/90 shadow-[0_8px_24px_rgba(51,65,85,0.08),inset_0_2px_4px_rgba(255,255,255,0.95),inset_0_-2px_4px_rgba(0,0,0,0.03)] relative z-40">
+        <header className="px-3 sm:px-6 lg:px-10 py-2.5 sm:py-3.5 shrink-0 bg-gradient-to-r from-[#CAD5E2] via-[#E1E9F0] to-[#C3D0DD] backdrop-blur-xl border-b-2 border-slate-300/90 shadow-[0_8px_24px_rgba(51,65,85,0.08),inset_0_2px_4px_rgba(255,255,255,0.95),inset_0_-2px_4px_rgba(0,0,0,0.03)] relative z-40">
           {/* Ambient Slate Grey & Soft Pebble Glows (Self-contained) */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute -top-10 left-1/4 w-96 h-28 bg-[#94A3B8]/20 rounded-full blur-2xl" />
             <div className="absolute -bottom-8 right-1/4 w-72 h-20 bg-white/50 rounded-full blur-2xl" />
           </div>
 
-          <div className="max-w-6xl mx-auto w-full flex items-center justify-between gap-6 relative z-10">
+          <div className="max-w-6xl mx-auto w-full flex items-center justify-between gap-2.5 sm:gap-6 relative z-10">
+            {/* Mobile 3-line Hamburger Menu Button & Mini Brand Emblem */}
+            <div className="flex items-center gap-2 lg:hidden shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsMobileSidebarOpen(true)}
+                className="w-10 h-10 rounded-xl bg-white border-2 border-slate-300/80 shadow-[0_2px_8px_rgba(15,23,42,0.08)] flex items-center justify-center text-[#11233D] hover:bg-slate-50 active:scale-95 transition-all cursor-pointer"
+                aria-label="Open sidebar menu"
+                title="Open Navigation Menu"
+              >
+                <Menu className="w-5 h-5 text-[#11233D]" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveNav(userRole === "student" ? "Overview" : "Batch Cockpit")}
+                className="h-10 px-2 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                title="Return to Dashboard"
+              >
+                <img
+                  src="/brand/logo-icon.png"
+                  alt="C2C"
+                  className="w-6 h-6 object-contain"
+                />
+              </button>
+            </div>
+
             {/* 1. Search Input with Dynamic Navigation Dropdown - Crisp White Pebble Capsule */}
-            <div ref={searchContainerRef} className="relative w-full max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <div ref={searchContainerRef} className="relative flex-1 max-w-md">
+              <Search className="absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
               <input
                 ref={searchInputRef}
                 type="text"
@@ -965,8 +1019,8 @@ export default function StudentDashboard() {
                     setIsSearchOpen(false);
                   }
                 }}
-                placeholder="Search pathways, skill analytics, or press ⌘K..."
-                className="w-full bg-white pl-11 pr-24 py-2.5 rounded-full border-2 border-slate-300/80 text-sm text-[#0F1E36] placeholder-slate-400 shadow-[0_4px_16px_rgba(15,23,42,0.05),inset_0_2px_4px_rgba(255,255,255,1)] hover:border-slate-400 focus:outline-none focus:border-[#00CEE6] focus:ring-2 focus:ring-[#00CEE6]/30 transition-all"
+                placeholder="Search pathways, skill analytics, or ⌘K..."
+                className="w-full bg-white pl-9 sm:pl-11 pr-8 sm:pr-24 py-2 sm:py-2.5 rounded-full border-2 border-slate-300/80 text-xs sm:text-sm text-[#0F1E36] placeholder-slate-400 shadow-[0_4px_16px_rgba(15,23,42,0.05),inset_0_2px_4px_rgba(255,255,255,1)] hover:border-slate-400 focus:outline-none focus:border-[#00CEE6] focus:ring-2 focus:ring-[#00CEE6]/30 transition-all"
               />
 
               {/* Clear Search & Keyboard Shortcut Keycap Pill */}
@@ -1088,7 +1142,7 @@ export default function StudentDashboard() {
 
                 {/* Notifications Popover - Fully Visible Floating Pebble Card */}
                 {isNotificationsOpen && (
-                  <div className="absolute right-0 top-12 w-84 sm:w-96 bg-white rounded-[28px] shadow-[0_20px_50px_rgba(15,23,42,0.22),0_4px_16px_rgba(15,23,42,0.08)] border-2 border-slate-200 p-4 z-[60] animate-in fade-in space-y-3">
+                  <div className="absolute right-0 top-12 w-[calc(100vw-28px)] max-w-sm sm:w-96 bg-white rounded-[28px] shadow-[0_20px_50px_rgba(15,23,42,0.22),0_4px_16px_rgba(15,23,42,0.08)] border-2 border-slate-200 p-4 z-[60] animate-in fade-in space-y-3">
                     {/* Popover Header */}
                     <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                       <div className="flex items-center gap-2">
@@ -1199,7 +1253,7 @@ export default function StudentDashboard() {
         </header>
 
         {/* Dynamic View Content Based on Selected Tab */}
-        <main className="flex-1 px-6 lg:px-10 pt-6 pb-16 flex flex-col overflow-y-auto overflow-x-hidden">
+        <main className="flex-1 px-3 sm:px-6 lg:px-10 pt-3 sm:pt-6 pb-24 lg:pb-12 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain">
           {/* ======================================================== */}
           {/* FACULTY VIEW 1: MARK ATTENDANCE                           */}
           {/* ======================================================== */}
@@ -1764,6 +1818,77 @@ export default function StudentDashboard() {
             />
           )}
         </main>
+
+        {/* ======================================================== */}
+        {/* MOBILE FLOATING BOTTOM BAR (Quick Thumb Navigation)      */}
+        {/* ======================================================== */}
+        <nav className="lg:hidden fixed bottom-3 left-3 right-3 z-40 bg-[#11233D]/95 backdrop-blur-xl rounded-2xl p-1.5 border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.36)] flex items-center justify-around select-none">
+          {(userRole === "admin"
+            ? [
+                { id: "Batch Cockpit", label: "Cockpit", icon: LayoutDashboard },
+                { id: "Cohort Analytics", label: "Analytics", icon: PieChart },
+                { id: "At-Risk Matrix", label: "At-Risk", icon: AlertTriangle },
+                { id: "Permissions", label: "Leave/OD", icon: ShieldCheck },
+              ]
+            : userRole === "faculty"
+            ? [
+                { id: "Mark Attendance", label: "Attendance", icon: UserCheck },
+                { id: "Internal Marks", label: "Grades", icon: Award },
+                { id: "My Course", label: "Course", icon: BookOpen },
+                { id: "My Mentees", label: "Mentees", icon: Users },
+              ]
+            : [
+                { id: "Overview", label: "Overview", icon: Home },
+                { id: "Career Paths", label: "Pathways", icon: Compass },
+                { id: "Success Score", label: "Score", icon: Gauge },
+                { id: "Attendance", label: "Attendance", icon: UserCheck },
+                { id: "Interventions", label: "Action Plan", icon: Target },
+              ]
+          ).map((tabItem) => {
+            const TabIcon = tabItem.icon;
+            const isActive =
+              activeNav === tabItem.id ||
+              (tabItem.id === "Career Paths" && activeNav === "Career Pathways") ||
+              (tabItem.id === "Batch Cockpit" && activeNav === "Overview" && userRole === "admin");
+            return (
+              <button
+                key={tabItem.id}
+                type="button"
+                onClick={() => setActiveNav(tabItem.id)}
+                className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all flex-1 cursor-pointer relative ${
+                  isActive
+                    ? "text-white font-black"
+                    : "text-slate-400 hover:text-slate-200 font-semibold"
+                }`}
+              >
+                {isActive && (
+                  <span className="absolute -top-1 w-6 h-1 rounded-full bg-[#00CEE6] shadow-[0_0_8px_#00CEE6]" />
+                )}
+                <TabIcon
+                  className={`w-4 h-4 mb-0.5 transition-all ${
+                    isActive ? "text-[#00CEE6] scale-110 drop-shadow-[0_0_6px_rgba(0,206,230,0.8)]" : ""
+                  }`}
+                />
+                <span className="text-[10px] tracking-tight truncate max-w-[56px] leading-tight">
+                  {tabItem.label}
+                </span>
+              </button>
+            );
+          })}
+
+          {/* 3-Line Hamburger Menu Trigger in Bottom Bar */}
+          <button
+            type="button"
+            onClick={() => setIsMobileSidebarOpen(true)}
+            className="flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all flex-1 cursor-pointer text-slate-400 hover:text-white"
+            title="Open full menu"
+          >
+            <Menu className="w-4 h-4 mb-0.5 text-slate-300" />
+            <span className="text-[10px] tracking-tight truncate max-w-[56px] leading-tight font-semibold">
+              Menu
+            </span>
+          </button>
+        </nav>
       </div>
 
       {/* ======================================================== */}
@@ -1774,15 +1899,15 @@ export default function StudentDashboard() {
       {exploredPathwayModal && (
         <div
           onClick={() => setExploredPathwayModal(null)}
-          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 relative"
+            className="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 relative"
           >
             <button
               onClick={() => setExploredPathwayModal(null)}
-              className="absolute right-5 top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
+              className="absolute right-4 sm:right-5 top-4 sm:top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1832,15 +1957,15 @@ export default function StudentDashboard() {
       {isDsaModalOpen && (
         <div
           onClick={() => setIsDsaModalOpen(false)}
-          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-100 relative space-y-4"
+            className="bg-white rounded-3xl max-w-xl w-full p-4 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 relative space-y-4"
           >
             <button
               onClick={() => setIsDsaModalOpen(false)}
-              className="absolute right-5 top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
+              className="absolute right-4 sm:right-5 top-4 sm:top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1940,15 +2065,15 @@ export default function StudentDashboard() {
       {isBookingModalOpen && (
         <div
           onClick={() => setIsBookingModalOpen(false)}
-          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 relative space-y-4"
+            className="bg-white rounded-3xl max-w-md w-full p-4 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 relative space-y-4"
           >
             <button
               onClick={() => setIsBookingModalOpen(false)}
-              className="absolute right-5 top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
+              className="absolute right-4 sm:right-5 top-4 sm:top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -2035,15 +2160,15 @@ export default function StudentDashboard() {
       {isLeaveModalOpen && (
         <div
           onClick={() => setIsLeaveModalOpen(false)}
-          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 relative space-y-4"
+            className="bg-white rounded-3xl max-w-md w-full p-4 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 relative space-y-4"
           >
             <button
               onClick={() => setIsLeaveModalOpen(false)}
-              className="absolute right-5 top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
+              className="absolute right-4 sm:right-5 top-4 sm:top-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-[#11233D] flex items-center justify-center cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -2145,11 +2270,11 @@ export default function StudentDashboard() {
       {isQRModalOpen && (
         <div
           onClick={() => setIsQRModalOpen(false)}
-          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+          className="fixed inset-0 bg-[#11233D]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center relative"
+            className="bg-white rounded-3xl max-w-sm w-full p-5 sm:p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 text-center relative"
           >
             <button
               onClick={() => setIsQRModalOpen(false)}

@@ -145,28 +145,28 @@ export default function SuccessScoreScreen({
   ];
 
   return (
-    <div className="max-w-6xl mx-auto w-full space-y-6 animate-in fade-in duration-300 pb-12">
+    <div className="max-w-6xl mx-auto w-full space-y-4 sm:space-y-6 animate-in fade-in duration-300 pb-12">
       {/* Top Header */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold tracking-wider text-[#825FEF] uppercase bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200">
+            <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-[#825FEF] uppercase bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200">
               Predictive Index
             </span>
-            <span className="text-xs text-slate-400 font-medium">Roll: 21BCE1089</span>
+            <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Roll: 21BCE1089</span>
           </div>
-          <h1 className="text-2xl font-black text-[#11233D] mt-1 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-[#11233D] mt-1 tracking-tight">
             Success Score
           </h1>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
           <button
             onClick={() => {
               const el = document.getElementById("score-simulator");
               el?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-[#11233D] bg-[#EFF4F7] hover:bg-slate-200 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-[#11233D] bg-[#EFF4F7] hover:bg-slate-200 transition-colors cursor-pointer"
           >
             <Sliders className="w-3.5 h-3.5 text-[#825FEF]" />
             <span>Simulator</span>
@@ -175,7 +175,7 @@ export default function SuccessScoreScreen({
           <button
             onClick={handleExportPDF}
             disabled={downloading}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#11233D] hover:bg-[#1E3A5F] shadow-xs transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold text-white bg-[#11233D] hover:bg-[#1E3A5F] shadow-xs transition-colors cursor-pointer"
           >
             <Download className="w-3.5 h-3.5 text-[#00CEE6]" />
             <span>{downloading ? "Exporting..." : "Export Report"}</span>
@@ -184,21 +184,21 @@ export default function SuccessScoreScreen({
       </div>
 
       {/* Main Score Hero Card & Key Metrics */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-5">
         {/* Score Dial Card (5 cols) */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-[#11233D] via-[#162D4D] to-[#0A1626] text-white p-6 sm:p-7 rounded-3xl shadow-md border border-white/10 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-gradient-to-br from-[#11233D] via-[#162D4D] to-[#0A1626] text-white p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl shadow-md border border-white/10 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#00CEE6]">
+            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#00CEE6]">
               Overall Score
             </span>
-            <span className="text-xs font-bold bg-white/10 text-white px-2.5 py-1 rounded-full border border-white/15">
+            <span className="text-[11px] sm:text-xs font-bold bg-white/10 text-white px-2.5 py-1 rounded-full border border-white/15">
               Target: 80+
             </span>
           </div>
 
-          <div className="my-6 flex items-center gap-6">
+          <div className="my-4 sm:my-6 flex items-center gap-4 sm:gap-6">
             {/* Circular Gauge */}
-            <div className="relative w-32 h-32 shrink-0 flex items-center justify-center">
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 shrink-0 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                 <circle
                   cx="50"
@@ -221,15 +221,15 @@ export default function SuccessScoreScreen({
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-3xl font-black text-white">{baseScore}</span>
-                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-widest -mt-0.5">
+                <span className="text-2xl sm:text-3xl font-black text-white">{baseScore}</span>
+                <span className="text-[9px] sm:text-[10px] text-slate-300 font-bold uppercase tracking-widest -mt-0.5">
                   / 100
                 </span>
               </div>
             </div>
 
             {/* Status & Potential Gain */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <div className="inline-flex items-center gap-1.5 bg-cyan-400/15 border border-cyan-400/30 text-[#00CEE6] text-xs font-bold px-2.5 py-1 rounded-lg">
                 <Target className="w-3.5 h-3.5" />
                 <span>Tier-2 Ready</span>
@@ -244,14 +244,14 @@ export default function SuccessScoreScreen({
             </div>
           </div>
 
-          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs">
+          <div className="pt-3 sm:pt-4 border-t border-white/10 flex items-center justify-between text-xs">
             <span className="text-slate-300">Percentile</span>
             <span className="font-bold text-[#00CEE6]">Top 28% of Cohort</span>
           </div>
         </div>
 
         {/* 4 Metric Tiles (7 cols) */}
-        <div className="lg:col-span-7 grid grid-cols-2 gap-4">
+        <div className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-4">
           <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500 uppercase">Target</span>

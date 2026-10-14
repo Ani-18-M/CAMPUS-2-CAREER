@@ -960,11 +960,11 @@ export default function AttendanceDashboard({
   const thresholdY = 130 + (radius + 2) * Math.sin(thresholdRad);
 
   return (
-    <div className="font-attendance max-w-6xl mx-auto space-y-8 animate-in fade-in duration-300 pb-12">
+    <div className="font-attendance max-w-6xl mx-auto space-y-4 sm:space-y-8 animate-in fade-in duration-300 pb-12">
       {/* ======================================================== */}
       {/* SECTION 0: CLEAN ATTENDANCE HERO BANNER (PEBBLE SLATE)   */}
       {/* ======================================================== */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#D2E4EA] via-[#BFDBE3] to-[#A8D3DD] p-7 sm:p-8 rounded-[38px] sm:rounded-[48px] border-2 border-[#00CEE6]/40 shadow-[0_20px_50px_-12px_rgba(0,180,216,0.25),0_6px_20px_rgba(17,35,61,0.07),inset_0_2px_4px_rgba(255,255,255,0.85),inset_0_-2px_4px_rgba(0,180,216,0.2)]">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#D2E4EA] via-[#BFDBE3] to-[#A8D3DD] p-4 sm:p-7 lg:p-8 rounded-3xl sm:rounded-[48px] border-2 border-[#00CEE6]/40 shadow-[0_20px_50px_-12px_rgba(0,180,216,0.25),0_6px_20px_rgba(17,35,61,0.07),inset_0_2px_4px_rgba(255,255,255,0.85),inset_0_-2px_4px_rgba(0,180,216,0.2)]">
         {/* Deeper Slate Cyan Ambient Glow Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#00CEE6]/25 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#ACBACC]/40 rounded-full blur-2xl pointer-events-none" />
@@ -983,9 +983,9 @@ export default function AttendanceDashboard({
           <BookMarked className="absolute top-5 right-1/4 w-20 h-20 text-[#00CEE6]/18 rotate-6 stroke-[1.3]" />
         </div>
 
-        <div className="relative z-10 flex items-center gap-5">
+        <div className="relative z-10 flex items-center gap-3.5 sm:gap-5">
           {/* Enlarged Graduate Student Photo Avatar with Pebble Curvature */}
-          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-[28px] sm:rounded-[36px] overflow-hidden ring-2 ring-[#00CEE6] shadow-md shrink-0 bg-[#11233D]">
+          <div className="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-2xl sm:rounded-[36px] overflow-hidden ring-2 ring-[#00CEE6] shadow-md shrink-0 bg-[#11233D]">
             <img
               src="/brand/hero-graduate.jpg"
               alt="Student Profile"
@@ -993,11 +993,11 @@ export default function AttendanceDashboard({
             />
           </div>
           <div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl sm:text-3xl font-black text-[#11233D] tracking-tight">
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#11233D] tracking-tight">
                 Attendance
               </h1>
-              <span className="bg-white/85 text-slate-700 text-xs font-black px-4 py-1.5 rounded-full border border-white/90 shadow-2xs">
+              <span className="bg-white/85 text-slate-700 text-[10px] sm:text-xs font-black px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-white/90 shadow-2xs">
                 III B.Tech [CSE - C6] · Room 2303 · NEC
               </span>
             </div>
@@ -1073,15 +1073,15 @@ export default function AttendanceDashboard({
       {/* ======================================================== */}
       {/* ATTENDANCE SECTION: OVERALL PEBBLE SLATE CARD            */}
       {/* ======================================================== */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#EAF0F6] via-[#F4F7FA] to-[#DEE6EE] p-6 sm:p-8 rounded-[38px] sm:rounded-[48px] border-2 border-slate-200/90 shadow-[0_20px_50px_-12px_rgba(17,35,61,0.08),0_6px_20px_rgba(17,35,61,0.04),inset_0_2px_4px_rgba(255,255,255,0.95),inset_0_-2px_4px_rgba(0,0,0,0.02)]">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#EAF0F6] via-[#F4F7FA] to-[#DEE6EE] p-3.5 sm:p-6 lg:p-8 rounded-3xl sm:rounded-[48px] border-2 border-slate-200/90 shadow-[0_20px_50px_-12px_rgba(17,35,61,0.08),0_6px_20px_rgba(17,35,61,0.04),inset_0_2px_4px_rgba(255,255,255,0.95),inset_0_-2px_4px_rgba(0,0,0,0.02)]">
         {/* Soft Pebble Slate Ambient Glows */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#00CEE6]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#ACBACC]/25 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-stretch">
 
-          {/* LEFT SIDE: PEBBLE THEMED TOTAL ATTENDANCE POD (MATCHING STATIC HEIGHT) */}
-          <div className="lg:col-span-4 flex flex-col justify-between p-5 sm:p-6 rounded-[32px] sm:rounded-[38px] bg-white/95 border-2 border-slate-200/80 shadow-[0_10px_30px_-6px_rgba(17,35,61,0.05),inset_0_2px_4px_rgba(255,255,255,1)] relative overflow-hidden min-h-[760px] h-full">
+          {/* LEFT SIDE: PEBBLE THEMED TOTAL ATTENDANCE POD (MATCHING STATIC HEIGHT ON DESKTOP) */}
+          <div className="lg:col-span-4 flex flex-col justify-between p-4 sm:p-6 rounded-2xl sm:rounded-[38px] bg-white/95 border-2 border-slate-200/80 shadow-[0_10px_30px_-6px_rgba(17,35,61,0.05),inset_0_2px_4px_rgba(255,255,255,1)] relative overflow-hidden min-h-0 lg:min-h-[760px] h-full">
             {/* Ambient Pod Glow */}
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#00CEE6]/10 rounded-full blur-2xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-36 h-36 bg-[#825FEF]/8 rounded-full blur-2xl pointer-events-none" />
@@ -1098,7 +1098,7 @@ export default function AttendanceDashboard({
               </div>
 
               {/* Radial Donut Gauge Visualizer */}
-              <div className="relative w-[210px] h-[210px] sm:w-[230px] sm:h-[230px] flex items-center justify-center my-2 relative z-10">
+              <div className="relative w-[170px] h-[170px] sm:w-[220px] sm:h-[220px] flex items-center justify-center my-1 sm:my-2 relative z-10">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 260 260">
                   {/* 1. Background full track representing 100% maximum capacity */}
                   <circle
@@ -1256,7 +1256,7 @@ export default function AttendanceDashboard({
           </div>
 
           {/* RIGHT SIDE: SCHEDULE & BREAKDOWN CARD - SLATE GREY PEBBLE CARD */}
-          <div className="lg:col-span-8 bg-gradient-to-br from-[#D5DEE7] via-[#E4EBF2] to-[#CBD6E2] rounded-[32px] sm:rounded-[38px] border-2 border-slate-300/90 p-5 sm:p-6 shadow-[0_12px_36px_-8px_rgba(71,85,105,0.15),inset_0_2px_4px_rgba(255,255,255,0.95)] relative overflow-hidden flex flex-col justify-between min-h-[760px] h-full">
+          <div className="lg:col-span-8 bg-gradient-to-br from-[#D5DEE7] via-[#E4EBF2] to-[#CBD6E2] rounded-2xl sm:rounded-[38px] border-2 border-slate-300/90 p-4 sm:p-6 shadow-[0_12px_36px_-8px_rgba(71,85,105,0.15),inset_0_2px_4px_rgba(255,255,255,0.95)] relative overflow-hidden flex flex-col justify-between min-h-0 lg:min-h-[760px] h-full">
             {/* Ambient soft slate grey & cyan glow */}
             <div className="absolute top-0 right-0 w-80 h-80 bg-[#94A3B8]/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#00CEE6]/10 rounded-full blur-3xl pointer-events-none" />
