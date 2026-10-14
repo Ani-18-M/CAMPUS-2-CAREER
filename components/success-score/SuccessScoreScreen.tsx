@@ -334,11 +334,17 @@ export default function SuccessScoreScreen({
             return (
               <div
                 key={p.id}
-                className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/70 flex flex-col justify-between"
+                onClick={() => {
+                  if (p.id === "academics") onNavigateTab("Academic Performance");
+                  else if (p.id === "attendance") onNavigateTab("Attendance");
+                  else if (p.id === "coding" || p.id === "projects") onNavigateTab("Career Paths");
+                  else if (p.id === "readiness") onNavigateTab("Interventions");
+                }}
+                className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/70 hover:border-[#00CEE6] hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#11233D]">
+                    <div className="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#11233D] group-hover:text-[#00CEE6] group-hover:border-[#00CEE6]/40 transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
                     <span className="text-[10px] font-bold text-slate-400">
@@ -346,7 +352,7 @@ export default function SuccessScoreScreen({
                     </span>
                   </div>
 
-                  <h3 className="text-xs font-bold text-[#11233D]">{p.title}</h3>
+                  <h3 className="text-xs font-bold text-[#11233D] group-hover:text-[#00CEE6] transition-colors">{p.title}</h3>
                   <div className="text-lg font-black text-[#11233D] mt-0.5">
                     {p.score}
                     <span className="text-[11px] text-slate-400 font-medium">/100</span>

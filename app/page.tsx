@@ -74,6 +74,7 @@ import FacultyMentorshipClusters from "@/components/faculty/FacultyMentorshipClu
 import AdminPermissionsGovernance from "@/components/kpmg/AdminPermissionsGovernance";
 import StudentPermissionsView from "@/components/attendance/StudentPermissionsView";
 import SuccessScoreScreen from "@/components/success-score/SuccessScoreScreen";
+import AcademicPerformanceScreen from "@/components/academic/AcademicPerformanceScreen";
 import { SharedPermissionRequest, INITIAL_SHARED_PERMISSIONS } from "@/types/permissions";
 
 export default function StudentDashboard() {
@@ -1389,9 +1390,20 @@ export default function StudentDashboard() {
 
           {/* ======================================================== */}
           {/* VIEW E: STUDENT 360° PROFILE / ACADEMIC PERFORMANCE      */}
+          {/* ── Academic Performance ───────────────────────────────── */}
+          {activeNav === "Academic Performance" && (
+            <AcademicPerformanceScreen
+              onNavigateTab={(tab) => {
+                if (tab === "Interventions") setActiveNav("Interventions");
+                else if (tab === "Attendance") setActiveNav("Attendance");
+                else if (tab === "Success Score") setActiveNav("Success Score");
+                else setActiveNav(tab);
+              }}
+            />
+          )}
+
           {/* ======================================================== */}
           {(activeNav === "360 Record" ||
-            activeNav === "Academic Performance" ||
             (activeNav === "Student Roster" && (userRole === "admin" || (userRole === "faculty" && selectedFacultyStudent)))) && (
             <div className="max-w-6xl mx-auto w-full space-y-6 animate-in fade-in duration-200">
               {/* Administrative & Faculty Inspection Banner */}
@@ -1505,11 +1517,9 @@ export default function StudentDashboard() {
                 <div className="flex gap-2 pt-4 border-b border-slate-100 text-xs font-bold text-slate-500">
                   <button
                     onClick={() => {
-                      setProfileTab("academics");
+                      setActiveNav("Academic Performance");
                     }}
-                    className={`pb-3 px-3 transition-colors border-b-2 cursor-pointer flex items-center gap-2 ${
-                      profileTab === "academics" ? "border-[#00D2EA] text-[#0F1E36]" : "border-transparent hover:text-[#0F1E36]"
-                    }`}
+                    className="pb-3 px-3 transition-colors border-b-2 cursor-pointer flex items-center gap-2 border-transparent hover:text-[#0F1E36]"
                   >
                     <img src="/brand/icons/academic.png" alt="Academic Performance" className="w-4 h-4 object-contain inline-block" />
                     <span>Academics & GPA</span>
