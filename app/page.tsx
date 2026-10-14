@@ -76,6 +76,7 @@ import StudentPermissionsView from "@/components/attendance/StudentPermissionsVi
 import SuccessScoreScreen from "@/components/success-score/SuccessScoreScreen";
 import AcademicPerformanceScreen from "@/components/academic/AcademicPerformanceScreen";
 import { SharedPermissionRequest, INITIAL_SHARED_PERMISSIONS } from "@/types/permissions";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function StudentDashboard() {
   // Navigation State
@@ -143,6 +144,36 @@ export default function StudentDashboard() {
 
   // Authenticated Persona State (Admin vs Faculty vs Student)
   const [userRole, setUserRole] = useState<"admin" | "faculty" | "student">("student");
+
+  // Restore Supabase authenticated session on mount & subscribe to auth state changes
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const metaRole = session.user.user_metadata?.role as "admin" | "faculty" | "student" | undefined;
+        if (metaRole && ["admin", "faculty", "student"].includes(metaRole)) {
+          setUserRole(metaRole);
+          setActiveNav(metaRole === "student" ? "Overview" : "Batch Cockpit");
+        }
+        setIsAuthenticated(true);
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const metaRole = session.user.user_metadata?.role as "admin" | "faculty" | "student" | undefined;
+        if (metaRole && ["admin", "faculty", "student"].includes(metaRole)) {
+          setUserRole(metaRole);
+        }
+        setIsAuthenticated(true);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const personas = {
     admin: {
@@ -864,7 +895,14 @@ export default function StudentDashboard() {
         <div className="pt-3 border-t border-[#334155]">
           <button
             type="button"
-            onClick={() => setIsAuthenticated(false)}
+            onClick={async () => {
+              try {
+                await supabase.auth.signOut();
+              } catch {
+                // Ignore signout network errors
+              }
+              setIsAuthenticated(false);
+            }}
             className="group relative w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl font-bold transition-all duration-200 cursor-pointer select-none bg-white/[0.06] hover:bg-rose-500/20 border border-white/10 hover:border-rose-400/40 text-slate-200 hover:text-white shadow-sm"
             title="Log Out of Session"
           >

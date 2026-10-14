@@ -46,3 +46,6 @@ public/test_shapes.html
 
 # skills lock
 skills-lock.json
+
+# mcp configuration (contains secrets)
+.mcp.json
