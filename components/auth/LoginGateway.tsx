@@ -208,7 +208,10 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
   };
 
   // 4. Handle OAuth Providers with graceful error notification
-  const handleOAuthLogin = async (provider: "azure" | "facebook" | "apple", label: string) => {
+  const handleOAuthLogin = async (
+    provider: "google" | "facebook" | "apple" | "azure",
+    label: string
+  ) => {
     setErrorMessage(null);
     setSuccessMessage(null);
     setActiveProvider(label);
@@ -454,14 +457,14 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
                   )}
                 </div>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-[#ACBACC] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <Lock className="w-4 h-4 text-[#ACBACC] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10" />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className={`w-full bg-[#EEF3F6]/70 hover:bg-[#EEF3F6] focus:bg-white border-2 border-[#ACBACC]/40 rounded-2xl pl-10 pr-10 py-2.5 text-xs text-[#11233D] placeholder-[#ACBACC] font-medium shadow-[inset_0_2px_4px_rgba(17,35,61,0.03)] focus:outline-none transition-all ${
+                    className={`w-full bg-[#EEF3F6]/70 hover:bg-[#EEF3F6] focus:bg-white border-2 border-[#ACBACC]/40 rounded-2xl pl-10 pr-12 py-2.5 text-xs text-[#11233D] placeholder-[#ACBACC] font-medium shadow-[inset_0_2px_4px_rgba(17,35,61,0.03)] focus:outline-none transition-all ${
                       role === "student"
                         ? "focus:border-[#00CEE6]"
                         : role === "faculty"
@@ -471,10 +474,11 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    tabIndex={-1}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#ACBACC] hover:text-[#11233D] transition-colors cursor-pointer"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#ACBACC] hover:text-[#11233D] transition-colors cursor-pointer z-20 rounded-full hover:bg-black/5 active:scale-90"
                     title={showPassword ? "Hide password" : "Show password"}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4" />
@@ -492,14 +496,14 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-[#ACBACC] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <Lock className="w-4 h-4 text-[#ACBACC] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10" />
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       required
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className={`w-full bg-[#EEF3F6]/70 hover:bg-[#EEF3F6] focus:bg-white border-2 border-[#ACBACC]/40 rounded-2xl pl-10 pr-10 py-2.5 text-xs text-[#11233D] placeholder-[#ACBACC] font-medium shadow-[inset_0_2px_4px_rgba(17,35,61,0.03)] focus:outline-none transition-all ${
+                      className={`w-full bg-[#EEF3F6]/70 hover:bg-[#EEF3F6] focus:bg-white border-2 border-[#ACBACC]/40 rounded-2xl pl-10 pr-12 py-2.5 text-xs text-[#11233D] placeholder-[#ACBACC] font-medium shadow-[inset_0_2px_4px_rgba(17,35,61,0.03)] focus:outline-none transition-all ${
                         role === "student"
                           ? "focus:border-[#00CEE6]"
                           : role === "faculty"
@@ -509,10 +513,11 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
                     />
                     <button
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      tabIndex={-1}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#ACBACC] hover:text-[#11233D] transition-colors cursor-pointer"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#ACBACC] hover:text-[#11233D] transition-colors cursor-pointer z-20 rounded-full hover:bg-black/5 active:scale-90"
                       title={showConfirmPassword ? "Hide password" : "Show password"}
+                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="w-4 h-4" />
@@ -610,34 +615,40 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
             </span>
           </div>
 
-          {/* Social / SSO Buttons */}
-          <div className="flex items-center justify-center gap-3">
-            {/* Microsoft 365 */}
+          {/* Social / SSO Buttons: Google, Facebook, Apple */}
+          <div className="flex items-center justify-center gap-3.5">
+            {/* Google */}
             <button
               type="button"
-              onClick={() => handleOAuthLogin("azure", "Microsoft")}
+              onClick={() => handleOAuthLogin("google", "Google")}
               disabled={loading}
-              className="w-11 h-11 rounded-2xl bg-[#EEF3F6] hover:bg-white border-2 border-[#ACBACC]/45 shadow-[0_3px_8px_rgba(17,35,61,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.8)] hover:border-[#ACBACC] active:scale-95 transition-all flex items-center justify-center cursor-pointer group disabled:opacity-50"
-              title="Sign in with Microsoft 365"
+              className="w-12 h-12 rounded-2xl bg-[#EEF3F6] hover:bg-white border-2 border-[#ACBACC]/45 shadow-[0_3px_8px_rgba(17,35,61,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.8)] hover:border-[#ACBACC] active:scale-95 transition-all flex items-center justify-center cursor-pointer group disabled:opacity-50"
+              title="Sign in with Google"
+              aria-label="Sign in with Google"
             >
-              <svg className="w-4.5 h-4.5 transition-transform group-hover:scale-110" viewBox="0 0 21 21">
-                <rect x="1" y="1" width="9" height="9" fill="#F25022" />
-                <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
-                <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
-                <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
-              </svg>
-            </button>
-
-            {/* Apple */}
-            <button
-              type="button"
-              onClick={() => handleOAuthLogin("apple", "Apple")}
-              disabled={loading}
-              className="w-11 h-11 rounded-2xl bg-[#EEF3F6] hover:bg-white border-2 border-[#ACBACC]/45 shadow-[0_3px_8px_rgba(17,35,61,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.8)] hover:border-[#ACBACC] active:scale-95 transition-all flex items-center justify-center cursor-pointer group disabled:opacity-50"
-              title="Sign in with Apple"
-            >
-              <svg className="w-4.5 h-4.5 transition-transform group-hover:scale-110 text-[#11233D]" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 1.01-2.85-.9.04-2 .6-2.65 1.35-.58.66-1.1 1.73-.96 2.76 1.01.08 1.99-.51 2.6-1.26z" />
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                className="w-5 h-5 transition-transform group-hover:scale-110"
+                style={{ width: "20px", height: "20px", minWidth: "20px", minHeight: "20px" }}
+              >
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                />
               </svg>
             </button>
 
@@ -646,11 +657,40 @@ export default function LoginGateway({ onLogin }: LoginGatewayProps) {
               type="button"
               onClick={() => handleOAuthLogin("facebook", "Facebook")}
               disabled={loading}
-              className="w-11 h-11 rounded-2xl bg-[#EEF3F6] hover:bg-white border-2 border-[#ACBACC]/45 shadow-[0_3px_8px_rgba(17,35,61,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.8)] hover:border-[#ACBACC] active:scale-95 transition-all flex items-center justify-center cursor-pointer group disabled:opacity-50"
+              className="w-12 h-12 rounded-2xl bg-[#EEF3F6] hover:bg-white border-2 border-[#ACBACC]/45 shadow-[0_3px_8px_rgba(17,35,61,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.8)] hover:border-[#ACBACC] active:scale-95 transition-all flex items-center justify-center cursor-pointer group disabled:opacity-50"
               title="Sign in with Facebook"
+              aria-label="Sign in with Facebook"
             >
-              <svg className="w-4.5 h-4.5 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="#1877F2">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="#1877F2"
+                className="w-5 h-5 transition-transform group-hover:scale-110"
+                style={{ width: "20px", height: "20px", minWidth: "20px", minHeight: "20px" }}
+              >
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+            </button>
+
+            {/* Apple */}
+            <button
+              type="button"
+              onClick={() => handleOAuthLogin("apple", "Apple")}
+              disabled={loading}
+              className="w-12 h-12 rounded-2xl bg-[#EEF3F6] hover:bg-white border-2 border-[#ACBACC]/45 shadow-[0_3px_8px_rgba(17,35,61,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.8)] hover:border-[#ACBACC] active:scale-95 transition-all flex items-center justify-center cursor-pointer group disabled:opacity-50"
+              title="Sign in with Apple"
+              aria-label="Sign in with Apple"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-5 h-5 transition-transform group-hover:scale-110 text-[#11233D]"
+                style={{ width: "20px", height: "20px", minWidth: "20px", minHeight: "20px" }}
+              >
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 1.01-2.85-.9.04-2 .6-2.65 1.35-.58.66-1.1 1.73-.96 2.76 1.01.08 1.99-.51 2.6-1.26z" />
               </svg>
             </button>
           </div>
